@@ -10,7 +10,13 @@ pipeline {
                 '''
             }
         }
-        stage('Start') {
+        stage('Clear all docker data') {
+            steps {
+                sh 'docker system prune -a --volumes -f'
+            }
+        }
+
+        stage('Build and start docker containers') {
             steps {
                 sh 'docker-compose up'
                 sh 'docker-compose ps'
