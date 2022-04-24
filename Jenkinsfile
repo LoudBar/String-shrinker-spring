@@ -10,9 +10,20 @@ pipeline {
                 '''
             }
         }
+        stage('Running tests') {
+            steps {
+                sh './mvnw test'
+            }
+            post {
+                always {
+                    junit '**/target/surefire-reports/TEST-*.xml'
+                }
+            }
+        }
         stage('Build and start docker containers') {
             steps {
-                sh 'docker-compose up'
+                sh 'docker-compose down'
+                sh 'docker-compose up -d'
                 sh 'docker-compose ps'
             }
         }
@@ -20,13 +31,6 @@ pipeline {
     post {
         always {
             sh 'docker-compose down'
-            sh 'docker-compose ps'
-            sh 'docker stop application'
-            sh 'docker rm application'
-            sh 'docker image rm application-image'
-            sh 'docker stop redis'
-            sh 'docker rm redis'
-            sh 'docker image rm redis-image'
             sh 'docker-compose ps'
         }
     }
