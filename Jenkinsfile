@@ -12,7 +12,13 @@ pipeline {
         }
         stage('Clear all docker data') {
             steps {
-                sh 'docker system prune -a --volumes -f'
+                sh 'docker stop application'
+                sh 'docker rm application'
+                sh 'docker image rm application-image'
+                sh 'docker stop redis'
+                sh 'docker rm redis'
+                sh 'docker image rm redis-image'
+
             }
         }
 
