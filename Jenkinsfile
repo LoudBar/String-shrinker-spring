@@ -10,18 +10,6 @@ pipeline {
                 '''
             }
         }
-        stage('Clear all docker data') {
-            steps {
-                sh 'docker stop application'
-                sh 'docker rm application'
-                sh 'docker image rm application-image'
-                sh 'docker stop redis'
-                sh 'docker rm redis'
-                sh 'docker image rm redis-image'
-
-            }
-        }
-
         stage('Build and start docker containers') {
             steps {
                 sh 'docker-compose up'
@@ -32,6 +20,13 @@ pipeline {
     post {
         always {
             sh 'docker-compose down'
+            sh 'docker-compose ps'
+            sh 'docker stop application'
+            sh 'docker rm application'
+            sh 'docker image rm application-image'
+            sh 'docker stop redis'
+            sh 'docker rm redis'
+            sh 'docker image rm redis-image'
             sh 'docker-compose ps'
         }
     }
