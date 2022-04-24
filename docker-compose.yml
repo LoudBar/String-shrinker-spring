@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+
+  application:
+    image:
+      application-image
+    build:
+      dockerfile:
+        Dockerfile
+      context: .
+    container_name: application
+    networks:
+      - cloud
+    ports:
+      - "8080:8080"
+    depends_on:
+      - redis
+    environment:
+      - "REDIS_HOST=redis"
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+
+  redis:
+    image:
+      redis-image
+    build:
+      dockerfile:
+        Dockerfile
+      context: ./Redis
+    container_name: redis
+    networks:
+      - cloud
+    ports:
+      - "6379:6379"
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+
+networks:
+  cloud:
+    external: true
