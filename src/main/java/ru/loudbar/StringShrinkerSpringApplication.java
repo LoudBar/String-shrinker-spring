@@ -10,5 +10,4 @@ public class StringShrinkerSpringApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(StringShrinkerSpringApplication.class, args);
 	}
-
 }
