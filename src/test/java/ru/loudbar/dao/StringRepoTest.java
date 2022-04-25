@@ -2,24 +2,26 @@ package ru.loudbar.dao;
 
 
 import com.github.fppt.jedismock.RedisServer;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.junit4.SpringRunner;
 import redis.clients.jedis.JedisPooled;
 
 import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-
-class StringRepoTest {
+@RunWith(SpringRunner.class)
+public class StringRepoTest {
 
     RedisServer redisServer;
     StringRepo stringRepo;
     JedisPooled jedisPooled;
 
-    @BeforeEach
-    void setUp() throws IOException {
+    @Before
+    public void setUp() throws IOException {
         redisServer = RedisServer.newRedisServer(8080);
         redisServer.start();
         jedisPooled = new JedisPooled(redisServer.getHost(), redisServer.getBindPort());
@@ -27,26 +29,26 @@ class StringRepoTest {
     }
 
     @Test
-    void putStringSuccess() {
+    public void putStringSuccess() {
         stringRepo.putString("qwerty");
         int id = (int) jedisPooled.dbSize();
-        assertEquals("qwerty", jedisPooled.get(String.valueOf(id)));
+        Assert.assertEquals("qwerty", jedisPooled.get(String.valueOf(id)));
     }
 
     @Test
-    void retrieveStringSuccess() {
+    public void retrieveStringSuccess() {
         jedisPooled.set(String.valueOf(jedisPooled.dbSize() + 1), "qwerty");
         int id = (int) jedisPooled.dbSize();
-        assertEquals("qwerty", stringRepo.retrieveString(id));
+        Assert.assertEquals("qwerty", stringRepo.retrieveString(id));
     }
 
     @Test
-    void retrieveStringFail() {
-        assertNull(jedisPooled.get("any"));
+    public void retrieveStringFail() {
+        Assert.assertNull(jedisPooled.get("any"));
     }
 
-    @AfterEach
-    void tearDown() throws IOException {
+    @After
+    public void tearDown() throws IOException {
         redisServer.stop();
     }
 }

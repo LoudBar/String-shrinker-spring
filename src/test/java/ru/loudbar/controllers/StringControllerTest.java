@@ -1,6 +1,7 @@
 package ru.loudbar.controllers;
 
-import org.junit.jupiter.api.Test;
+
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,23 +23,23 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT, classes = StringShrinkerSpringApplication.class)
+@SpringBootTest
 @AutoConfigureMockMvc
-class StringControllerTest {
+public class StringControllerTest {
 
     @Autowired private MockMvc mockMvc;
     @MockBean private StringService stringService;
 
 
     @Test
-    void getMainPage() throws Exception {
+    public void getMainPage() throws Exception {
         this.mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("main_page"));
     }
 
     @Test
-    void shrinkStringSuccess() throws Exception {
+    public void shrinkStringSuccess() throws Exception {
 
         String out = "b";
 
@@ -54,7 +55,7 @@ class StringControllerTest {
     }
 
     @Test
-    void unshrinkString() throws Exception {
+    public void unshrinkString() throws Exception {
 
         String out = "any";
 
