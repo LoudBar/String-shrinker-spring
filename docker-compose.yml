@@ -36,11 +36,17 @@ services:
       - cloud
     ports:
       - "6379:6379"
+    volumes:
+      - redis-volume:/data
     logging:
       driver: "json-file"
       options:
         max-file: "5"
         max-size: "10m"
+
+volumes:
+  redis-volume:
+    external: true
 
 networks:
   cloud:
