@@ -1,57 +1,41 @@
 package ru.loudbar.services;
 
-import com.github.fppt.jedismock.RedisServer;
-import org.junit.jupiter.api.*;
-import redis.clients.jedis.JedisPooled;
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.test.context.junit4.SpringRunner;
 import ru.loudbar.dao.StringRepo;
 
-import java.io.IOException;
+@RunWith(SpringRunner.class)
+public class StringServiceTest {
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+    @TestConfiguration
+    static class StringServiceTestContextConfiguration {
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class StringServiceTest {
+        @MockBean private StringRepo stringRepo;
 
-    RedisServer redisServer;
-    StringRepo stringRepo;
-    JedisPooled jedisPooled;
-    StringService stringService;
+        @Bean
+        public StringService stringService() {
+            return new StringService(stringRepo);
+        }
+    }
 
-    @BeforeEach
-    void setUp() throws IOException {
-        redisServer = RedisServer.newRedisServer(8080);
-        redisServer.start();
-        jedisPooled = new JedisPooled(redisServer.getHost(), redisServer.getBindPort());
-        stringRepo = new StringRepo(jedisPooled);
-        stringService = new StringService(stringRepo);
+    @Autowired
+    private StringService stringService;
+
+    @Test
+    public void encode() {
+        Assert.assertEquals("", stringService.encode("qwerty"));
     }
 
     @Test
-    @Order(1)
-    void encodeSuccess() {
-        assertEquals("b", stringService.encode("fawefs"));
-    }
+    public void decode() {
 
-    @Test
-    @Order(2)
-    void decodeSuccess() {
-        stringRepo.putString("fawefs");
-        assertEquals("fawefs", stringService.decode("b"));
-    }
-
-    @Test
-    void encodeFailEmptyString() {
-        assertNull(stringService.decode(""));
-    }
-
-    @Test
-    void decodeFailWrongString() {
-        assertNull(stringService.decode("ewrgthyj"));
-    }
-
-    @AfterEach
-    void tearDown() throws IOException {
-        redisServer.stop();
+        Assert.assertNull( stringService.decode("b"));
     }
 }

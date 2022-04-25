@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 import ru.loudbar.services.StringService;
 
-import javax.servlet.http.HttpServletResponse;
-
 @Controller
 @RequiredArgsConstructor
 public class StringController {
