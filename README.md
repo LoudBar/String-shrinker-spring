@@ -6,5 +6,5 @@ docker network create cloud
 ```
 docker-compose up
 ```
-#### Jenkins: Запуск тестов и контейнеризация приложения по коммиту  
+#### Jenkins: Запуск тестов и контейнеризация приложения по коммиту, пуш образов на Docker Hub  
 [Демонстрация](https://youtu.be/5f7-_tMTL0s)  
