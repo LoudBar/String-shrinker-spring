@@ -4,7 +4,7 @@ services:
 
   application:
     image:
-      application-image
+      loudbar/string-shrink
     build:
       dockerfile:
         Dockerfile
@@ -26,7 +26,7 @@ services:
 
   redis:
     image:
-      redis-image
+      loudbar/string-shrink_db
     build:
       dockerfile:
         Dockerfile
