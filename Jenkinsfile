@@ -40,6 +40,13 @@ pipeline {
                 sh 'docker push loudbar/string-shrink_db:latest'
             }
         }
+        stage('EKS Deploy') {
+            steps {
+                sh 'kubectl apply -f ./Redis/redis-configmap.yml'
+                sh 'kubectl apply -f ./Redis/redis-k8s.yml'
+                sh 'kubectl apply -f ./Redis/redis-k8s.yml'
+            }
+        }
     }
     post {
         always {

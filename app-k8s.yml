@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-deployment
+  labels:
+    app: application
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: application
+  template:
+    metadata:
+      labels:
+        app: application
+    spec:
+      containers:
+        - name: application-container
+          image: loudbar/string-shrink
+          ports:
+          - containerPort: 8080
+          env:
+          - name: REDIS_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: redis-configmap
+                key: database_url
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: application-service
+spec:
+  selector:
+    app: application
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      nodePort: 30000
