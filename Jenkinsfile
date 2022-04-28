@@ -41,11 +41,11 @@ pipeline {
             }
         }
         stage('EKS Deploy') {
-            steps {
-                sh 'kubectl apply -f ./Redis/redis-configmap.yml'
-                sh 'kubectl apply -f ./Redis/redis-k8s.yml'
-                sh 'kubectl apply -f ./Redis/redis-k8s.yml'
-            }
+            kubernetesDeploy (
+                configs: 'String-shrinker-spring/app-k8s.yml',
+                kubeconfigId: 'k8s-aws',
+                enableConfigSubstitution: true
+            )
         }
     }
     post {
